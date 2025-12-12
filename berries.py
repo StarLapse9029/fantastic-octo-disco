@@ -24,24 +24,44 @@ def get_berries() -> dict:
         details["smoothness"] = berry_details["smoothness"]
         details["soil_dryness"] = berry_details["soil_dryness"]
         berry[i["name"]] = details
+
     return berry
 
 
-def add_random_order(data: dict) -> dict:
-    for y in data.values():
-        y["sales"] = random.randint(1, 999) * 1000
-    return data
-
-
-def write_to_csv(data: dict) -> None:
-    with open("berries_sales.csv", "w") as fd:
+def add_random_order(data: dict):
+    regions = [
+        "Kanto",
+        "Johto",
+        "Hoenn",
+        "Sinnoh",
+        "Unova",
+        "Kalos",
+        "Alola",
+        "Galar",
+        "Paldea",
+    ]
+    result = list()
+    for region in regions:
         for y in data.values():
+            copy = y.copy()
+            copy["sales"] = random.randint(1, 999) * 1000
+            copy["region"] = region
+            result.append(copy)
+    return result
+
+
+def write_to_csv(data: list) -> None:
+    with open("berries_sales.csv", "w") as fd:
+        for line in data:
+            """
             items = [x for x in y.items()]
             string = ""
             for i in items:
                 string += f"{i}"
                 string += ";"
             fd.write(f"{string}\n")
+            """
+            fd.write(f"{line}\n")
     return
 
 
